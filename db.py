@@ -1,10 +1,10 @@
 import sqlalchemy
 from sqlalchemy.orm import declarative_base
 
-from sqlalchemy import create_engine, MData
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import Session
 
-mdata = MData()
+metadata = MetaData()
 Basis = declarative_base()
 
 
@@ -27,6 +27,33 @@ with Session(engine) as session:
     from_bd = session.query(Candidat).filter(Candidat.profile_id == 1).all()
     for item in from_bd:
         print(item.worksheet_id)
+        
+# функция сохранения данных о пользователе ВКонтакте в базу данных
+# возвращае True, если данные сохранены в базе данных, иначе False
+    def new_vkuser(self, user_id: VKUser) -> bool:
+        sql = f"""
+            SELECT * FROM users_id WHERE vk_id={user_id.vk_id};
+            """
+        result = self.connection.execute(sql).fetchone()
+        # если запрос выполнился успешно
+        if result is None:
+            # нет такого пользователя в базе данных
+            sql = f"""
+                INSERT INTO vk_users (vk_id, name_user, lastname_user, bdate, sex, city, vkdomain, last_visit, settings) 
+                VALUES ({user_id.vk_id},'{user_id.name_user}','{user_id.lastname_user}','{user_id.bdate}',{user_id.sex},{user_id.city},'{user_id.vkdomain}','{user_id.last_visit}', ,{user_id.settings});
+                """
+        else:
+            # пользователь уже существует в базе данных
+            sql = f"""
+                UPDATE vk_users SET last_visit = '{user_id.last_visit}' WHERE vk_id = {user_id.vk_id};
+                """
+        result = self.connection.execute(sql)
+        # если запрос выполнился с ошибкой
+        if result is None:
+            return False
+        # успешный результат
+        return True
+ 
 
 
 # coding=utf-8
