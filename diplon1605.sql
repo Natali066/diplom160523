@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS serch_user (
-	id_user INTEGER PRIMARY key,
+	user_id INTEGER PRIMARY key references user(id),
 	name_user VARCHAR (20),	
 	city VARCHAR (20),
 	now_year INTEGER,
