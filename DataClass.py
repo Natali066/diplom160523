@@ -65,16 +65,7 @@ if _name_ == '_main_':
 	bot.event_handler()
 
 
-        if event.to_me:
-            request = event.text
-
-            if request == "привет":
-                write_msg(event.user_id, f"Хай, {event.user_id}")
-            elif request == "пока":
-                write_msg(event.user_id, "Пока((")
-            else:
-                write_msg(event.user_id, "Не поняла вашего ответа...")
- coding=utf-8
+coding=utf-8
 # This is a sample Python script.
 
 # Press Shift+F10 to execute it or replace it with your code.
@@ -85,9 +76,5 @@ def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print("Hi, {0}".format(name))  # Press Ctrl+F8 to toggle the breakpoint.
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
