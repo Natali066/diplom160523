@@ -22,11 +22,11 @@ class VkBotInt():
 		self.params = None
 
 	def message_send(self, user_id, message, attachment=None):
-		self.interface.method('message.send’,
-				{'user_id’: user_id,
-				'message’: message,
-				'attachment’: attachment,
-				'random_id’: get_random_id()
+		self.interface.method('message.send',
+				{'user_id': user_id,
+				'message': message,
+				'attachment': attachment,
+				'random_id': get_random_id()
 				}
 				)
 
@@ -38,29 +38,29 @@ class VkBotInt():
   			if event.type == VkEventType.MESSAGE_NEW and event.to_me:
 				command = event.text.lower()
 
-				if command == 'привет’:
+				if command == 'привет':
 					self.params = self.api.get_profile_info(event.user_id)
-					self.message_send(event.user_id, f'здравствуй {self.params[“name”]}’)
+					self.message_send(event.user_id, f'здравствуй {self.params[“name”]}')
 
-				elif command == 'поиск’:
+				elif command == 'поиск':
 					users = self.api.serch_user(self.params)
 					user = users.pop()
-					photos_user = self.api.get_photos(user['id’])
+					photos_user = self.api.get_photos(user['id'])
 
 				attachment = ' '
 				for num, photo in enumerate(photos_user):
-					attachment += f'photo{photo[“ower_id]}_{photo[“id”]}’
+					attachment += f'photo{photo['ower_id']}_{photo['id']}'
 					if num == 2:
 						break
-				self.message_send(event.user_id, f'Встречайте {user[‘name’]}
+				self.message_send(event.user_id, f'Встречайте {user['name']}
 						attachment=attachment
 						)
-				elif command == 'пока’:
-					self.message_send(event.user_id, 'пока’)
+				elif command == 'пока':
+					self.message_send(event.user_id, 'пока')
 				else:
-					self.message_send(event.user_id, 'команда не опознана’)
+					self.message_send(event.user_id, 'команда не опознана')
 
-if _name_ == '_main_’:
+if _name_ == '_main_':
 	bot = VkBotInt(community_token, acces_token)
 	bot.event_handler()
 
