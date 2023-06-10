@@ -9,55 +9,55 @@ GROUP_ID = '219206692'
 
 #берет профиль пользователя
 def get_profile_user(self, user_id):
-	info = self.api.method('users.get’,
+	info = self.api.method('users.get',
 			{'user_id': user_id,
-			'fields': 'city, bdate, sex, relation, home_town, age’
+			'fields': 'city, bdate, sex, relation, home_town, age'
 			}
 			)
 
-	user_info = {'name’: info[‘first_name’] + ‘ ‘+ info[‘last_name’],
-		'id’: info[‘id’],
-		'bdate’: info[‘bdate’] if ‘bdate’ in info else None,
-		'home_town’: info[‘home_town’],
-		'sex’: info[‘sex’],
-		'city’: info[‘city’][‘id’],
-		'age’: info[‘age’]
+	user_info = {'name': info['first_name'] + ' '+ info['last_name'],
+		'id': info['id'],
+		'bdate': info['bdate'] if 'bdate' in info else None,
+		'home_town': info['home_town'],
+		'sex': info['sex'],
+		'city': info['city']['id'],
+		'age': info['age']
 		}
 	return  user_info
 
 #ищет пользователя
 def serch_users(self, params):
 
-	sex = 1 if params['sex’] == 2 else 2
-	city = params['city’]
+	sex = 1 if params['sex'] == 2 else 2
+	city = params['city']
 	now_year = datetime.now().year
-	user_year = int(params[‘bdate’].split(‘.’)[2])
+	user_year = int(params['bdate'].split('.')[2])
 	age = now_year – user_year
 	age_from = age -2
 	age_to = age =+2
 
-	users = self.api.method('users.search’,
-			{'count’: 10,
-			'offset’: 0,
-			'age_from’: age_from,
-			'age_to’: age_to,
-			'sex’: sex,
-			'city’: city,
-			'status’: 6,
-			'id_closed’: False
+	users = self.api.method('users.search',
+			{'count': 10,
+			'offset': 0,
+			'age_from': age_from,
+			'age_to': age_to,
+			'sex': sex,
+			'city': city,
+			'status': 6,
+			'id_closed': False
 			}
 			)
 	try:
-		users = user['items’]
+		users = user['items']
 	except KeyError:
 		return []
 
 	res = []
 
 	for user in users:
-		if user['id_closed’] == False:
-			res.append({'id’: user[‘id’],
-			'name’: user[‘first_name’] + ‘ ‘ + user[‘last_name’]
+		if user['id_closed'] == False:
+			res.append({'id': user['id'],
+			'name': user['first_name'] + ' ' + user['last_name']
 			}
 			)
 
@@ -65,37 +65,37 @@ def serch_users(self, params):
 
 #берет фото
 def get_photos(self, user_id):
-	photos = self.api.method('photos.get’,
-			{'user_id’: user_id,
-			'album_id’: ‘profile’,
-			'extanded’: 1
+	photos = self.api.method('photos.get',
+			{'user_id': user_id,
+			'album_id': 'profile',
+			'extanded': 1
 			}
 			)
 
 	try:
-		photos = photos['items’]
+		photos = photos['items']
 	exept KeyError:
 		return []
 
 	res = []
 
 	for photo in photos:
-		res.append({'owner_id’: photo[‘owner_id’],
-			'id’: photo[‘id’],
-			'likes’: photo[‘likes’][‘count’],
-			'comments’: photo[‘comments’][‘count’],
+		res.append({'owner_id': photo['owner_id'],
+			'id': photo['id'],
+			'likes': photo['likes']['count'],
+			'comments': photo['comments']['count'],
 			}
 			)
 
-	res.sort(key=lambda x: x['likes’]+x[‘comments’]*10, reverse = True
+	res.sort(key=lambda x: x['likes']+x['comments']*10, reverse = True
 
 	return res
 
-if _name_ == '_main_’:
+if _name_ == '_main_':
 	bot = VkBot(acces_token)
 	params = bot.get_profile_info(219206692)
 	users = bot.serch_users(params)
-	print(bot.get_photos(users[2]['id’]))
+	print(bot.get_photos(users[2]['id']))
 				      
 def get_setings_smart (self, user_id: VKUser):
         if not self.db.get_setings(vk_user):
