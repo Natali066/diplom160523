@@ -9,7 +9,9 @@ from ClassVk import VkBot
 
 token = input('Token: vk1.a.dNojDDW48AEWikWCqn9pq8b4F5nL-D76wdCi4UOooav0kuXdsafTz797oqyOVgqxiD3oXTMWiZoE_YmQUgmcHeLLCiEMECDENFfuG8eZ5wo-WBIsTyqZVCxmtqt8ExuykoQnJl5gHtT8cD1dva49uCXkbiB0ENdpRvrb_Li6TfoqIvq9Hbmk02r4HE6HZDU_nMrVbfiqqllhtDsWZZqCxw')
 
-
+class VkTools():
+    def __init__(self, acces_token):
+       self.api = vk_api.VkApi(token=acces_token)
 vk = vk_api.VkApi(token=token)
 longpoll = VkLongPoll(vk)
 
