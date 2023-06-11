@@ -97,10 +97,10 @@ if _name_ == '_main_':
 	users = bot.serch_users(params)
 	print(bot.get_photos(users[2]['id']))
 				      
-def get_setings_smart (self, user_id: VKUser):
-        if not self.db.get_setings(vk_user):
+def get_settings_smart (self, user_id: VKUser):
+        if not self.db.get_settings(vk_user):
             vk_user.set_default_settings()
-            self.db.set_setings(vk_user)
+            self.db.set_settings(vk_user)
 
 # coding=utf-8
 # This is a sample Python script.
