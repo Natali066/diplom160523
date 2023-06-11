@@ -1,23 +1,21 @@
 import sqlalchemy
 from sqlalchemy.orm import declarative_base
-
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import Session
 
 metadata = MetaData()
 Basis = declarative_base()
 
-
 class Candidate(Basis):
-    __tablename__ = 'cfndidate'
-    profile_id = sq.Column(sq.Integer, primary_key=True)
-    worksheet_id = sq.Column(sq.Integer, primary_key=True)
+    __tablename__ = 'candidates'
+    user_id = sq.Column(sq.Integer, primary_key=True)
+    name_user = sq.Column(sq.Integer, primary_key=True)
 
 # добавление записи в бд
 engine = create_engine(db_url_object)
 Basis.metadata.create_all(engine)
 with Session(engine) as session:
-    to_bd = Candidat(profile_id=1, worksheet_id=1)
+    to_bd = Candidat(user_id=1, name_user=1)
     session.add(to_bd)
     session.commit()
 
@@ -26,7 +24,7 @@ engine = create_engine(db_url_object)
 with Session(engine) as session:
     from_bd = session.query(Candidat).filter(Candidat.profile_id == 1).all()
     for item in from_bd:
-        print(item.worksheet_id)
+        print(item.name_user)
         
 # функция сохранения данных о пользователе ВКонтакте в базу данных
 # возвращае True, если данные сохранены в базе данных, иначе False
