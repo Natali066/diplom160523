@@ -3,9 +3,13 @@ import vk_api
 from config import acces_token
 
 class VkBot():
-	def _init_(self, acces_token):
+	def _init_(self, acces_token, db: str):
 		self.api = vk_api.VkApi(token=acces_token)
+	        self.db = db
+        	self.engine = sqlalchemy.create_engine(self.db)
+                self.connection = self.engine.connect()
 GROUP_ID = '219206692'
+
 
 #берет профиль пользователя
 def get_profile_user(self, user_id):
