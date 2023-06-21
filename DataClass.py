@@ -18,7 +18,7 @@ longpoll = VkLongPoll(vk)
 
 class VkBotInt():
 
-	def _init_(self, community_yoken, acces_token):
+	def _init_(self, community_token, acces_token):
 		self.interface = vk_api.VkApi(token=community_token)
 		self.api = VkTools(acces_token)
 		self.params = None
@@ -42,7 +42,7 @@ class VkBotInt():
 
 				if command == 'привет':
 					self.params = self.api.get_profile_info(event.user_id)
-					self.message_send(event.user_id, f'здравствуй {self.params[“name”]}')
+					self.message_send(event.user_id, f'здравствуй {self.params['name']}')
 
 				elif command == 'поиск':
 					users = self.api.serch_user(self.params)
