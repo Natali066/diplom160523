@@ -94,6 +94,18 @@ def get_photos(self, user_id):
 	res.sort(key=lambda x: x['likes']+x['comments']*10, reverse = True
 
 	return res
+ 
+add_user(user_id, result[i][3], result[i][1], result[i][0], city, result[i][2], current_user_id.id)
+
+	elif command == 'поиск':
+		if len(self.users) == 0:
+			self.users = self.api.serch_user(self.params)
+					
+	user = self.users.pop()
+
+def check_db_master(user):
+    current_user_id = session.query(user).filter_by(vk_id=ids).first()
+    return current_user_id
 
 if _name_ == '_main_':
 	bot = VkBot(acces_token)
