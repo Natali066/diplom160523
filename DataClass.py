@@ -54,6 +54,9 @@ class VkBotInt():
 							self.users = self.api.serch_user(self.params)
 					
 						user = self.users.pop()
+					
+				 add_user(user_id, result[i][3], result[i][1], result[i][0], city, result[i][2], current_user_id.id)
+	
 
 				attachment = ' '
 				for num, photo in enumerate(photos_user):
