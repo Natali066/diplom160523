@@ -49,6 +49,12 @@ class VkBotInt():
 					user = users.pop()
 					photos_user = self.api.get_photos(user['id'])
 
+					elif command == 'поиск':
+						if len(self.users) == 0:
+							self.users = self.api.serch_user(self.params)
+					
+						user = self.users.pop()
+
 				attachment = ' '
 				for num, photo in enumerate(photos_user):
 					attachment += f'photo{photo['ower_id']}_{photo['id']}'
