@@ -1,100 +1,91 @@
-from datatime import datatime
+from pprint import pprint
+from datetime import datetime
 import vk_api
+from vk_api.exceptions import ApiError
 from config import acces_token
 
-class VkBot():
-	def _init_(self, acces_token, db: str):
-		self.api = vk_api.VkApi(token=acces_token)
-	        self.db = db
-        	self.engine = sqlalchemy.create_engine(self.db)
-                self.connection = self.engine.connect()
-GROUP_ID = '219206692'
+
+class VkBot:
+    def __init__(self, acces_token):
+        self.vkapi = vk_api.VkApi(token=acces_token)
+
+    def _bdate_(self,bdate):
+        user_year = bdate.split('.')[2]
+        now = datetime.now().year
+        return now - int(user_year)
+
+    def get_profile(self,user_id):
+
+        try:
+            info, = self.vkapi.method('user.get',
+                                      {'user_id': user_id,
+                                       'fields': 'city, sex, relation, bdate'
+                                       }
+                                      )
+        except ApiError as e:
+            info = {}
+            print(f'error = {e}')
+
+        result = {'name': (info['first_name'] + ' ' + info['last_name']) if
+                  'first_name' in info and 'last_name' in info else None,
+                  'sex': info.get('sex'),
+                  'city': info.get('city')['title'] if info.get('city') is not None else None,
+                  'year': self._bdate_toyear(info.get('bdate'))
+                  }
+        return result
+
+    def search_worksheet(selfself,params,offset):
+        try:
+            users = self.vkapi.method('user.search',
+                                      {
+                                          'count': 10,
+                                          'offset': offset,
+                                          'hometown': params['city'],
+                                          'sex': 1 if params['sex'] == 2 else 2,
+                                          'has_photo': True,
+                                          'age_from': params['year'] - 2,
+                                          'age_to': params['year'] + 2,
+                                      }
+                                      )
+        except ApiError as e:
+            users = []
+            print(f'error = {e}')
+
+        result = [{'name': item['first_name'] + item['last_name'],
+                   'id': item['id']
+                   } for item in users['items'] if item['is_closed'] is False
+                  ]
+
+        return result
 
 
-#берет профиль пользователя
-def get_profile_user(self, user_id):
-	info = self.api.method('users.get',
-			{'user_id': user_id,
-			'fields': 'city, bdate, sex, relation, home_town, age'
-			}
-			)
+    def get_photos (self, id):
+        try:
+            photos = self.vkapi.method('photos.get',
+                                       {'owner_id': id,
+                                        'album_id': 'profile',
+                                        'extended': 1
+                                        }
+                                       )
+        except ApiError as e:
+            photos = {}
+            print(f'error = {e}')
 
-	user_info = {'name': info['first_name'] + ' '+ info['last_name'],
-		'id': info['id'],
-		'bdate': info['bdate'] if 'bdate' in info else None,
-		'home_town': info['home_town'],
-		'sex': info['sex'],
-		'city': info['city']['id'],
-		'age': info['age']
-		}
-	return  user_info
+        result = [{'owner_id': item['owner_id'],
+                   'id': item['id'],
+                   'likes': item['likes']['count'],
+                   'comments': item['comments']['count']
+                   } for item in photos['items']
+                  ]
+        return result[:3]
 
-#ищет пользователя
-def serch_users(self, params):
+    if __name__ == '__main__':
+        user_id = 219206692
+        tools = VkTools(acces_token)
+        params = tools.get_profile_info(user_id)
+        photos = tools.get_photos(worksheets['id'])
 
-	sex = 1 if params['sex'] == 2 else 2
-	city = params['city']
-	now_year = datetime.now().year
-	user_year = int(params['bdate'].split('.')[2])
-	age = now_year – user_year
-	age_from = age -2
-	age_to = age =+2
 
-	users = self.api.method('users.search',
-			{'count': 10,
-			'offset': 0,
-			'age_from': age_from,
-			'age_to': age_to,
-			'sex': sex,
-			'city': city,
-			'status': 6,
-			'id_closed': False
-			}
-			)
-	try:
-		users = user['items']
-	except KeyError:
-		return []
-
-	res = []
-
-	for user in users:
-		if user['id_closed'] == False:
-			res.append({'id': user['id'],
-			'name': user['first_name'] + ' ' + user['last_name']
-			}
-			)
-
-	return res
-
-#берет фото
-def get_photos(self, user_id):
-	photos = self.api.method('photos.get',
-			{'user_id': user_id,
-			'album_id': 'profile',
-			'extanded': 1
-			}
-			)
-
-	try:
-		photos = photos['items']
-	exept KeyError:
-		return []
-
-	res = []
-
-	for photo in photos:
-		res.append({'owner_id': photo['owner_id'],
-			'id': photo['id'],
-			'likes': photo['likes']['count'],
-			'comments': photo['comments']['count'],
-			}
-			)
-
-	res.sort(key=lambda x: x['likes']+x['comments']*10, reverse = True
-
-	return res
- 
 add_user(user_id, result[i][3], result[i][1], result[i][0], city, result[i][2], current_user_id.id)
 
 	elif command == 'поиск':
@@ -107,12 +98,7 @@ def check_db_master(user):
     current_user_id = session.query(user).filter_by(vk_id=ids).first()
     return current_user_id
 
-if _name_ == '_main_':
-	bot = VkBot(acces_token)
-	params = bot.get_profile_info(219206692)
-	users = bot.serch_users(params)
-	print(bot.get_photos(users[2]['id']))
-				      
+	      
 def get_settings_smart (self, user_id: VKUser):
         if not self.db.get_settings(vk_user):
             vk_user.set_default_settings()
