@@ -5,7 +5,7 @@ from vk_api.exceptions import ApiError
 from config import acces_token
 
 
-class VkBot:
+class VkTools:
     def __init__(self, acces_token):
         self.vkapi = vk_api.VkApi(token=acces_token)
 
