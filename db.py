@@ -6,30 +6,45 @@ from sqlalchemy.orm import Session
 metadata = MetaData()
 Basis = declarative_base()
 
-class Candidate(Basis):
-    __tablename__ = 'candidates'
-    user_id = sq.Column(sq.Integer, primary_key=True)
-    name_user = sq.Column(sq.Integer, primary_key=True)
+import sqlalchemy as sq
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import creativ_engine Metadata
+from sqlalchemy.orm import Session
 
-# добавление записи в бд
-engine = create_engine(db_url_object)
-Basis.metadata.create_all(engine)
-with Session(engine) as session:
-    to_bd = Candidat(user_id=1, name_user=1)
-    session.add(to_bd)
-    session.commit()
+from config import dbl_url_object
 
-# извлечение записей из БД
-engine = create_engine(db_url_object)
-with Session(engine) as session:
-    from_bd = session.query(Candidat).filter(Candidat.profile_id == 1).all()
-    for item in from_bd:
-        print(item.name_user)
-        
-# функция сохранения данных о пользователе ВКонтакте в базу данных
-# возвращае True, если данные сохранены в базе данных, иначе False
-    def new_vkuser(self, user_id: VKUser) -> bool:
-        sql = f"""
+metadata = MetaData()
+Base = declarativ_base()
+
+
+class Viewed(Base):
+    __tablename__ = 'viewed'
+    profile_id = sq.Column (sq.Integer, primary_key = True)
+    worksheet_id = sq.Column(sq.Integer, primary_key=True)
+
+def add_user(engine, profile_id, worksheet_id):
+    with Session(engine) as session:
+        to_bd = Viewed(profile_id=profile_id, worksheet_id=worksheet_id)
+        session.add(to_bd)
+        session.commit()
+
+def chek_user(engine, profile_id, worksheet_id):
+    with Session(engine) as session:
+        from_bd = session.query(Viewed).filter(
+            Viewed.profile_id == profile_id,
+            Viewed.worksheet_id == worksheet_id
+        ). first()
+        return True if from_bd else False
+
+if __name__ == '__main__':
+    engine = create_engine(db_url_object)
+    Base.metadata.create_all(engine)
+    res = chek_user(engine, 2113, 1245121)
+    print(res)
+
+
+def new_user(self, user_id: Viewed) -> bool:
+    sql = f"""
             SELECT * FROM users_id WHERE vk_id={user_id.vk_id};
             """
         result = self.connection.execute(sql).fetchone()
