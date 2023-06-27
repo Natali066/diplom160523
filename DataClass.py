@@ -1,75 +1,135 @@
-#import vk_api
-
+import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 
 from config import community_token, acces_token
-from ClassVk import VkBot
+from core import VkTools
 
 
 token = input('Token: vk1.a.dNojDDW48AEWikWCqn9pq8b4F5nL-D76wdCi4UOooav0kuXdsafTz797oqyOVgqxiD3oXTMWiZoE_YmQUgmcHeLLCiEMECDENFfuG8eZ5wo-WBIsTyqZVCxmtqt8ExuykoQnJl5gHtT8cD1dva49uCXkbiB0ENdpRvrb_Li6TfoqIvq9Hbmk02r4HE6HZDU_nMrVbfiqqllhtDsWZZqCxw')
 
+class BotInt():
+    def __init__(self, comunity_token, acces_token):
+        self.vk = vk_api.VkApi(token=comunity_token)
+        self.longpoll = VkLongPoll(self.vk)
+        self.vk_tools = VkTools(acces_token)
+        self.params = {}
+        self.worksheets = []
+        self.offset = 0
+
+    def message_send(self, user_id, message, attachment=None):
+        self.vk.method('messages.send',
+                       {'user_id': user_id,
+                        'message': message,
+                        'attachment': attachment,
+                        'random_id': get_random_id()}
+                       )
+    def event_handler(self):
+        for event in self.longpoll.listen():
+            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                if event.text.lower() == 'привет':
+                    self.params = self.vk_tools.get_profale_info(event.user_id)
+                    self.message_send(
+                        event.user_ud, f'привет друг, {self.params["name"]}')
+                elif event.text.lower() == 'поиск':
+                    self.message_send(
+                        event.user_id, 'Нвчинаем поиск')
+                    if self.worksheets.pop()
+                        photos = self.vk_tools.get_photos(worksheet['id'])
+                        photo_string = ''
+                        for photo in photos:''
+                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]}',
+                    else:
+                        self.worksheets = self.vk_tools.search_worksheet(
+                            self.params, self.offset)
+
+                        worksheet =  self.worksheets.pop()
+
+                        photos = self.vk_tools.get_photos(worksheet['id'])
+                        photo_string = ''
+                        for photo in photos:'id'
+                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]},'
+                        self.offset += 10
+
+                    self.message_send(
+                        event.user_id,
+                        f'имя: {worksheet["name"]} ссылка: vk.com/{worksheet["id"]}',
+                        attachment=photo_string
+                    )
+                elif event.text.lower() == 'пока':
+                     self.message_send(
+                         event.user_id, 'До новых встреч')
+
+                else:
+                     self.message_send(
+                         event.user_id, 'неизвестная команда')
+    if __name__ == '__main__':
+        bot_interface = BotInterface(comunity_token, acces_token)
+        bot_interface.event_handler()
+
+class BotInt():
+    def __init__(self, comunity_token, acces_token):
+        self.vk = vk_api.VkApi(token=comunity_token)
+        self.longpoll = VkLongPoll(self.vk)
+        self.vk_tools = VkTools(acces_token)
+        self.params = {}
+        self.worksheets = []
+        self.offset = 0
+
+    def message_send(self, user_id, message, attachment=None):
+        self.vk.method('messages.send',
+                       {'user_id': user_id,
+                        'message': message,
+                        'attachment': attachment,
+                        'random_id': get_random_id()}
+                       )
+    def event_handler(self):
+        for event in self.longpoll.listen():
+            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                if event.text.lower() == 'привет':
+                    self.params = self.vk_tools.get_profale_info(event.user_id)
+                    self.message_send(
+                        event.user_ud, f'привет друг, {self.params["name"]}')
+                elif event.text.lower() == 'поиск':
+                    self.message_send(
+                        event.user_id, 'Начинаем поиск')
+                    if self.worksheets.pop()
+                        photos = self.vk_tools.get_photos(worksheet['id'])
+                        photo_string = ''
+                        for photo in photos:''
+                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]}',
+                    else:
+                        self.worksheets = self.vk_tools.search_worksheet(
+                            self.params, self.offset)
+
+                        worksheet =  self.worksheets.pop()
+
+                        photos = self.vk_tools.get_photos(worksheet['id'])
+                        photo_string = ''
+                        for photo in photos:'id'
+                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]},'
+                        self.offset += 10
+
+                    self.message_send(
+                        event.user_id,
+                        f'имя: {worksheet["name"]} ссылка: vk.com/{worksheet["id"]}',
+                        attachment=photo_string
+                    )
+                elif event.text.lower() == 'пока':
+                     self.message_send(
+                         event.user_id, 'До встречи')
+
+                else:
+                     self.message_send(
+                         event.user_id, 'команда не опознана')
+    if __name__ == '__main__':
+        bot_interface = BotInterface(comunity_token, acces_token)
+        bot_interface.event_handler()
 class VkTools():
     def __init__(self, acces_token):
        self.api = vk_api.VkApi(token=acces_token)
 vk = vk_api.VkApi(token=token)
 longpoll = VkLongPoll(vk)
-
-
-class VkBotInt():
-
-	def _init_(self, community_token, acces_token):
-		self.interface = vk_api.VkApi(token=community_token)
-		self.api = VkTools(acces_token)
-		self.params = None
-
-	def message_send(self, user_id, message, attachment=None):
-		self.interface.method('message.send',
-				{'user_id': user_id,
-				'message': message,
-				'attachment': attachment,
-				'random_id': get_random_id()
-				}
-				)
-
-	def event_handler(self):
-		longpoll = VkLongPoll(self.interface)
-
-
-		for event in longpoll.listen():
-  			if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-				command = event.text.lower()
-
-				if command == 'привет':
-					self.params = self.api.get_profile_info(event.user_id)
-					self.message_send(event.user_id, f'здравствуй {self.params['name']}')
-
-				elif command == 'поиск':
-					users = self.api.serch_user(self.params)
-					user = users.pop()
-					photos_user = self.api.get_photos(user['id'])
-
-					elif command == 'поиск':
-						if len(self.users) == 0:
-							self.users = self.api.serch_user(self.params)
-					
-						user = self.users.pop()
-					
-				 add_user(user_id, result[i][3], result[i][1], result[i][0], city, result[i][2], current_user_id.id)
-	
-
-				attachment = ' '
-				for num, photo in enumerate(photos_user):
-					attachment += f'photo{photo['ower_id']}_{photo['id']}'
-					if num == 2:
-						break
-				self.message_send(event.user_id, f'Встречайте {user['name']}
-						attachment=attachment
-						)
-				elif command == 'пока':
-					self.message_send(event.user_id, 'пока')
-				else:
-					self.message_send(event.user_id, 'команда не опознана')
 
 if _name_ == '_main_':
 	bot = VkBotInt(community_token, acces_token)
