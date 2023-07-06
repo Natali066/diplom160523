@@ -38,7 +38,7 @@ class BotInt():
                         photos = self.vk_tools.get_photos(worksheet['id'])
                         photo_string = ''
                         for photo in photos:''
-                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]}',
+                            photo_string += f'photo{photo["owner_id"]}_{photo["id"]},'
                     else:
                         self.worksheets = self.vk_tools.search_worksheet(
                             self.params, self.offset)
