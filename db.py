@@ -8,7 +8,7 @@ Basis = declarative_base()
 
 import sqlalchemy as sq
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import creativ_engine Metadata
+from sqlalchemy import creativ_engine MetaData
 from sqlalchemy.orm import Session
 
 from config import dbl_url_object
