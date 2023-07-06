@@ -47,7 +47,7 @@ def new_user(self, user_id: Viewed) -> bool:
     sql = f"""
             SELECT * FROM users_id WHERE vk_id={user_id.vk_id};
             """
-        result = self.connection.execute(sql).fetchone()
+    result = self.connection.execute(sql).fetchone()
         # если запрос выполнился успешно
         if result is None:
             # нет такого пользователя в базе данных
