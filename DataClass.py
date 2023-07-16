@@ -27,13 +27,13 @@ class BotInt():
     def event_handler(self):
         for event in self.longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                if event.text.lower() == 'привет':
+                if event.text.lower() == 'hi':
                     self.params = self.vk_tools.get_profale_info(event.user_id)
                     self.message_send(
-                        event.user_ud, f'привет друг, {self.params["name"]}')
-                elif event.text.lower() == 'поиск':
+                        event.user_ud, f'hi, {self.params["name"]}')
+                elif event.text.lower() == 'search':
                     self.message_send(
-                        event.user_id, 'Нвчинаем поиск')
+                        event.user_id, 'start search')
                     if self.worksheets.pop()
                         photos = self.vk_tools.get_photos(worksheet['id'])
                         photo_string = ''
@@ -53,16 +53,16 @@ class BotInt():
 
                     self.message_send(
                         event.user_id,
-                        f'имя: {worksheet["name"]} ссылка: vk.com/{worksheet["id"]}',
+                        f'name: {worksheet["name"]} link: vk.com/{worksheet["id"]}',
                         attachment=photo_string
                     )
-                elif event.text.lower() == 'пока':
+                elif event.text.lower() == 'by':
                      self.message_send(
-                         event.user_id, 'До новых встреч')
+                         event.user_id, 'by')
 
                 else:
                      self.message_send(
-                         event.user_id, 'неизвестная команда')
+                         event.user_id, 'unknown kommand')
     if __name__ == '__main__':
         bot_interface = BotInterface(comunity_token, acces_token)
         bot_interface.event_handler()
@@ -112,16 +112,16 @@ class BotInt():
 
                     self.message_send(
                         event.user_id,
-                        f'имя: {worksheet["name"]} ссылка: vk.com/{worksheet["id"]}',
+                        f'name: {worksheet["name"]} link: vk.com/{worksheet["id"]}',
                         attachment=photo_string
                     )
-                elif event.text.lower() == 'пока':
+                elif event.text.lower() == 'by':
                      self.message_send(
-                         event.user_id, 'До встречи')
+                         event.user_id, 'by')
 
                 else:
                      self.message_send(
-                         event.user_id, 'команда не опознана')
+                         event.user_id, 'unknown kommand')
     if __name__ == '__main__':
         bot_interface = BotInterface(comunity_token, acces_token)
         bot_interface.event_handler()
